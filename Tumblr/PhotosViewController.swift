@@ -18,9 +18,10 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        photoTable.rowHeight = 320
         let refreshControl = UIRefreshControl()
-        print("Hello World Here")
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
+        photoTable.rowHeight = 320
+        photoTable.insertSubview(refreshControl, at: 0)
         let apiKey = "Q6vHoaVm5L1u2ZAW1fqv3Jw48gFzYVg9P0vH0VHl3GVy6quoGV"
         let url = URL(string:"https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=\(apiKey)")
         let request = URLRequest(url: url!)
@@ -83,6 +84,37 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         return 10000
         
     }
+    
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+        
+        // ... Create the NSURLRequest (myRequest) ...
+        let apiKey = "Q6vHoaVm5L1u2ZAW1fqv3Jw48gFzYVg9P0vH0VHl3GVy6quoGV"
+        let url = URL(string:"https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=\(apiKey)")
+        let request = URLRequest(url: url!)
+        // Configure session so that completion handler is executed on main UI thread
+        let session = URLSession(
+            configuration: URLSessionConfiguration.default,
+            delegate:nil,
+            delegateQueue:OperationQueue.main
+        )
+
+        let task : URLSessionDataTask = session.dataTask(with: request,completionHandler: { (dataOrNil, response, error) in
+            if let data = dataOrNil {
+                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
+                    //NSLog("response: \(responseDictionary)")
+                    
+                    self.sourceDictionary = responseDictionary["response"] as? NSDictionary
+                    //print("Testing:", self.sourceDictionary)
+                    // Reload the tableView now that there is new data
+                    self.photoTable.reloadData()
+                    // Tell the refreshControl to stop spinning
+                    refreshControl.endRefreshing()
+                }
+            }
+        });
+        task.resume()
+    }
+    
     //Finding and passing the correct segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
