@@ -82,9 +82,9 @@
 		BFA590DB1DAB5C3000D1A280 /* Tumblr */ = {
 			isa = PBXGroup;
 			children = (
+				BFA590E01DAB5C3000D1A280 /* Main.storyboard */,
 				BFA590DC1DAB5C3000D1A280 /* AppDelegate.swift */,
 				BFA590DE1DAB5C3000D1A280 /* PhotosViewController.swift */,
-				BFA590E01DAB5C3000D1A280 /* Main.storyboard */,
 				BF8D8D271DB207FA00D0C9D3 /* photoDetailsViewController.swift */,
 				BF8D8D231DAB83EE00D0C9D3 /* photoTableViewCell.swift */,
 				BFA590E31DAB5C3000D1A280 /* Assets.xcassets */,

@@ -52,19 +52,12 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         var photoArray : Array? = [AnyObject]()
         var photoDetailDictionary : NSDictionary? = [:]
         var photoSizeDictionary : NSDictionary? = [:]
-        //var imageUrl : String? = " "
         let cell = tableView.dequeueReusableCell(withIdentifier: "photoViewCell") as! photoTableViewCell
-        //cell.photoview.conte
         postArray = self.sourceDictionary?["posts"] as? Array
-         //print("Testing:", postArray?[0])
         postsDetailDictionary = postArray?[indexPath.row] as? NSDictionary
-         //print("Testing:", postsDetailDictionary)
         photoArray = postsDetailDictionary?["photos"] as? Array
-         //print("Testing:", photoArray?[0])
         photoDetailDictionary = photoArray?[0] as? NSDictionary
-         //print("Testing:", photoDetailDictionary?["original_size"])
         photoSizeDictionary = photoDetailDictionary?["original_size"] as? NSDictionary
-        print("Testing:", photoSizeDictionary?["url"])
         
         if let imageUrl = photoSizeDictionary?["url"] as? String{
             print("imageUrl:",imageUrl)
@@ -81,7 +74,12 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
             return postcount
             
         }
-        return 10000
+        else{
+            return 10000
+        }
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
         
     }
     
@@ -117,16 +115,11 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     
     //Finding and passing the correct segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
             let destinationVC = segue.destination as! photoDetailsViewController
             let indexPath = photoTable.indexPath(for: sender as! photoTableViewCell)
-            print("Selected Index:",indexPath)
             let selectedCell = photoTable.cellForRow(at: indexPath!) as! photoTableViewCell
             destinationVC.image = selectedCell.photoview.image
     }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated:true)
-
-    }
+    
 }
 
